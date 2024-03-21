@@ -1,0 +1,67 @@
+package com.example.githubuserssearch.ui
+
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.githubuserssearch.data.response.GithubResponseItem
+import com.example.githubuserssearch.data.response.GithubUserSearchResponse
+import com.example.githubuserssearch.data.response.ItemsItem
+import com.example.githubuserssearch.data.retrofit.ApiConfig
+import com.example.githubuserssearch.databinding.ItemUserBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+class ListUserSearchAdapter : ListAdapter<ItemsItem, ListUserSearchAdapter.ViewHolder> (DIFF_CALLBACK){
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(data: Int)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, onItemClickCallback)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val preview = getItem(position)
+        holder.bind(preview)
+    }
+
+    class ViewHolder(private val binding: ItemUserBinding, listener : ListUserSearchAdapter.OnItemClickCallback) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.setOnClickListener {
+                listener.onItemClicked(adapterPosition)
+            }
+        }
+
+        fun bind(preview: ItemsItem) {
+            binding.userName.text = "${preview.login}"
+            Glide.with(binding.userImage.context).load(preview.avatarUrl.toString())
+                .into(binding.userImage)
+        }
+    }
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ItemsItem>() {
+            override fun areItemsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
+}
