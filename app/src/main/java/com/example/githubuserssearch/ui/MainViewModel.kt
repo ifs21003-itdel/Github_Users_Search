@@ -3,17 +3,20 @@ package com.example.githubuserssearch.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.githubuserssearch.data.response.GithubResponseItem
 import com.example.githubuserssearch.data.response.GithubUserSearchResponse
 import com.example.githubuserssearch.data.retrofit.ApiConfig
+import com.example.githubuserssearch.data_store.SettingPreference
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel :ViewModel() {
+class MainViewModel(private val pref: SettingPreference) :ViewModel() {
     val listUser = MutableLiveData<List<GithubResponseItem>>()
     val listUserSearch = MutableLiveData<GithubUserSearchResponse>()
-
     fun setListUser(){
         ApiConfig.getApiService().getGithubUser().enqueue(object : Callback<List<GithubResponseItem>>{
             override fun onResponse(
@@ -55,5 +58,16 @@ class MainViewModel :ViewModel() {
 
     fun getListUserSearch() : LiveData<GithubUserSearchResponse>{
         return listUserSearch
+    }
+
+
+    fun getThemeSettings(): LiveData<Boolean> {
+        return pref.getThemeSetting().asLiveData()
+    }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) {
+        viewModelScope.launch {
+            pref.saveThemeSetting(isDarkModeActive)
+        }
     }
 }

@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group android:menuCategory="container">
+    <group
+        android:menuCategory="container"
+        android:checkableBehavior="all">
 
         <item
             android:id="@+id/menu1"
-            android:icon="@drawable/baseline_settings_24"
+            android:icon="@drawable/baseline_heart"
+            app:showAsAction="always"
+            android:title="List Favorite" />
+
+
+        <item
+            android:id="@+id/menu2"
+            android:icon="@drawable/baseline_dark_mode_24"
             app:showAsAction="ifRoom"
             android:title="@string/setting_icon" />
-
     </group>
 
 </menu>

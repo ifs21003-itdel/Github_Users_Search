@@ -12,13 +12,7 @@ class ListUserSearchAdapter : RecyclerView.Adapter<ListUserSearchAdapter.ViewHol
     private var listUserSearch = ArrayList<ItemsItem>()
     private var onItemClickCallback: OnItemClickCallback? = null
 
-    fun setListUser(users: List<ItemsItem?>?){
-        listUserSearch.clear()
-        users?.forEach {
-            it?.let { it1 -> listUserSearch.add(it1) }
-        }
-        notifyDataSetChanged()
-    }
+
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
